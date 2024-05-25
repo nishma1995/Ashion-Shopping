@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+
+</head>
+
+<body>
+    {{> adminheader}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 d-flex flex-column align-items-start">
+                {{> adminsidebar}}
+                <div class="flex-grow-1"></div> <!-- This will make the sidebar expand to fill the available space -->
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <div class="container">
+                    <h1 class="mt-4 mb-4">Offer Data</h1>
+                    <!-- Filter options -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8"> <!-- Adjust column width as needed -->
+                            </div>
+                            <div class="col-md-4"> <!-- Adjust column width as needed -->
+                                <div class="d-flex justify-content-end mb-3" role="group" aria-label="Download">
+
+                                    <button type="button" class="btn btn-primary ml-2" data-bs-toggle="modal"
+                                        data-bs-target="#addOfferModal">Add Offer</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coupon List Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Title </th>
+                                {{!-- <th scope="col">Valid From</th>--}}
+                                <th scope="col">Category</th>
+                                <th scope="col">Products Name</th>
+                                {{!-- <td>status</td>--}}
+                                <th scope="col">Rate </th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            {{#each offers}}
+                            <tr>
+                                <td>{{addOne @index}}</td>
+                                <td>{{this.title}}</td>
+                                <td>{{this.category}}</td>
+                                <td>
+                                    <ul>
+                                        {{#each this.products}}
+                                        <li>{{this.name}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </td>
+                                <td>{{this.rate}}</td>
+                                <td id="offerStatus" data-offer-status="{{this.status}}">{{this.status}}</td>
+                                <td>
+                                    <div style="display:flex;gap:8px;">
+                                        <button type="button" class="btn btn-success toggleOfferBtn"
+                                            data-product-id="{{this._id}}">List</button>
+                                        <button type="button" class="btn btn-danger delete-btn" id="deleteBtn"
+                                            data-offer-id="{{this._id}}">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="addOfferModal" tabindex="-1" aria-labelledby="addOfferModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addOfferModalLabel">Add Offer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" id="title" placeholder="Enter title" required>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="category">Category:</label>
+                        <select class="form-control" id="category" required>
+                            {{#each categorydata}}
+                            <option value="{{this.name}}">{{this.name}} </option>
+                            {{/each}}
+                            <!-- Add more options as needed -->
+                        </select>
+
+                    </div>
+
+
+                    <!-- Rate input -->
+                    <div class="form-group">
+                        <label for="rate">Rate (%):</label>
+                        <input type="number" class="form-control" id="rate" placeholder="Enter rate" required>
+                    </div>
+
+                    <!-- Products list with multiple selection -->
+                    <div class="form-group">
+                        <label for="products">Products:</label>
+                        <select multiple class="form-control" id="products" required>
+
+                            <!-- Add more product options here -->
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitOfferBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+
+
+    <!-- Custom JavaScript for Coupon Actions -->
+    <script>
+        $(document).ready(function () {
+            $('#category').change(function () {
+                const category = $(this).val()
+                updateProductdropdown(category)
+            })
+
+            function updateProductdropdown(category) {
+                $.ajax(
+                    {
+                        type: 'GET',
+                        url: '/admin/offerProducts',
+                        data: { category: category },
+                        success: function (data) {
+                            const products = $('#products')
+                            products.empty()
+                            data.forEach(function (product) {
+                                products.append(`<option value="${product._id}">${product.name}</option>`)
+                            })
+                        },
+                        error: function (err) {
+                            alert("ERROR")
+
+                        }
+                    }
+                )
+            }
+            $('#submitOfferBtn').click(function () {
+                const title = $('#title').val()
+                const category = $('#category').val()
+                const rate = $('#rate').val()
+                const selectedProducts = $('#products').val()
+                console.log(selectedProducts)
+
+
+                if (!title || !category || !rate || !selectedProducts) {
+                    // Show an alert or notification that all fields are required
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Please fill in all fields.',
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    return; // Stop execution if any field is empty
+                }
+
+
+
+                const formData = {
+                    title: title,
+                    category: category,
+                    rate: rate,
+                    selectedProducts: selectedProducts
+                }
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/saveOffer',
+                    data: JSON.stringify(formData), // Convert to JSON format
+                    contentType: 'application/json', // Specify JSON content type
+                    success: function (response) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Offer saved successfully!',
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000
+                        });
+                        setTimeout(function () {
+                            window.location.reload()
+
+                        }, 4000)
+
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 400) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: ' Offer with the same title already exists.',
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 4000
+                            });
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: ' Error saving offer.',
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 4000
+                            });
+
+                        }
+                    }
+
+                })
+            });
+
+            $('.delete-btn').click(function () {
+                // Send a confirmation dialog before deleting
+                // alert("sdjhdfkyuv")
+                const offerId = $(this).data('offer-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User confirmed, proceed with deletion
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `/admin/deleteOffer/${offerId}`, // Adjust the URL as per your backend route
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: response.message,
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                                // Reload the page after deletion
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: xhr.responseJSON.error,
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 4000
+                                });
+                                console.error(error);
+                            }
+                        });
+                    }
+                })
+            })
+
+            $('.toggleOfferBtn').each(function () {
+                const button = $(this);
+                const statusElement = button.closest('tr').find('#offerStatus');
+                const initialStatus = statusElement.data('offer-status');
+                button.text(initialStatus ? 'Unlist' : 'List');
+            });
+
+            $('.toggleOfferBtn').click(function () {
+                const button = $(this);
+                const productId = $(this).data('product-id');
+                const statusElement = button.closest('tr').find('#offerStatus');
+
+
+
+                $.ajax({
+                    type: 'PUT',
+                    url: '/admin/listUnlist',
+                    data: { productId: productId },
+                    success: function (data) {
+                        console.log(data + "from backend"); // Log the response for debugging
+
+                        button.data('offer-status', data); // Update the status attribute in the button
+                        button.text(data ? 'Unlist' : 'List');
+                        statusElement.attr('data-offer-status', data);
+                        statusElement.text(data ? 'true' : 'false');
+                        //window.location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+
+
+
+        })
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

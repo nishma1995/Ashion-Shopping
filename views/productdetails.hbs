@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ashion</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .checkmark {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .white {
+            background-color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa fa-user"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    {{#if User}}
+                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    {{else if googleUser}}
+                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    {{else}}
+                    <li><a class="dropdown-item" href="/login">My Profile</a></li>
+                    <li><a class="dropdown-item" href="/login">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="/login">Orders</a></li>
+                    <li><a class="dropdown-item" href="/login">Wallet</a></li>
+                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                    {{/if}}
+                </ul>
+            </li>
+            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+        </ul>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/category?category=Women">Women</a></li>
+                            <li><a href="/category?category=Men">Men</a></li>
+                            <li><a href="/category?category=Kids">kids</a></li>
+                            <li><a href="/category?category=Accessories">Accessories</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="header__right">
+                        <div class="header__right__auth">
+                            {{#if User}}
+                            {{else if googleUser}}
+                            {{else}}
+                            <a href="/login">Login</a>
+                            <a href="/register">Register</a>
+                            {{/if}}
+                        </div>
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    {{#if User}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else if googleUser}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else}}
+                                    <li><a class="dropdown-item" href="/login">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/login">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/login">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/login">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                                    {{/if}}
+                                </ul>
+                            </li>
+                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__left product__thumb nice-scroll">
+                            <a class="pt active" href="#product-1">
+                                <img src="{{data.image.paths.[0]}}" alt="">
+                            </a>
+                            <a class="pt" href="#product-2">
+                                <img src="{{data.image.paths.[1]}}" alt="">
+                            </a>
+                            <a class="pt" href="#product-3">
+                                <img src="{{data.image.paths.[2]}}" alt="">
+                            </a>
+
+                        </div>
+                        <div class="product__details__slider__content">
+                            <div class="product__details__pic__slider owl-carousel">
+                                <img data-hash="product-1" class="product__big__img" src="{{data.image.paths.[0]}}"
+                                    alt="">
+                                <img data-hash="product-2" class="product__big__img" src="{{data.image.paths.[1]}}"
+                                    alt="">
+                                <img data-hash="product-3" class="product__big__img" src="{{data.image.paths.[2]}}"
+                                    alt="">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>{{data.name}}</h3>
+                        {{#if data.offerRate}}
+                        <div class="rating">
+                            <p style="color:blue;"><span
+                                    style="text-decoration:line-through">₹{{data.price}}</span>&nbsp;<span
+                                    style="text-decoration:none;color:red">{{data.offerRate}}%</span></p>
+                        </div>
+                        {{else}}
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <span>( 138 reviews )</span>
+                        </div>
+                        {{/if}}
+                        {{#if data.offerRate}}
+                        <div class="product__details__price">₹{{calculatePersatage data.offerRate data.price}}</div>
+                        {{else}}
+                        <div class="product__details__price">₹{{data.price}}</div>
+                        {{/if}}
+                        <p>{{data.name}}{{data.description}}</p>
+                        <div class="product__details__button">
+                            <div class="quantity">
+                                <span>Quantity:</span>
+                                <div class="pro-qty">
+                                    <input type="text" name="quantity" id="quantity" value="1">
+                                </div>
+                            </div>
+                            <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <ul>
+                                <li><a href="" onclick="addToWishlist('{{data._id}}')"><span
+                                            class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                            </ul>
+                        </div>
+                        <div id="cartMessage" style="color:green"></div>
+                        <div class="product__details__widget">
+                            <ul>
+                                <li>
+                                    <span>Availability:</span>
+                                    {{#if data.status}}
+                                    <div class="">
+                                        <label for="stockin">
+                                            In stock
+
+                                        </label>
+                                    </div>
+                                    {{else}}
+                                    <div class="">
+                                        <label for="stockin">
+                                            Out of Stock
+
+                                        </label>
+                                    </div>
+                                    {{/if}}
+                                </li>
+
+
+                                <li>
+                                    <span>Available size:</span>
+                                    <div class="size__btn">
+                                        {{#each sizedetails}}
+                                        <label for="{{size}}-btn">
+                                            <input type="radio" name="size__radio" id="{{size}}-btn" value="{{size}}"
+                                                checked>
+                                            {{this.size}}
+                                        </label>
+                                        {{/each}}
+                                    </div>
+                                </li>
+
+                                <!-- Color options -->
+                                <li>
+                                    <span>Available color:</span>
+                                    <div class="color__checkbox" id="colorOptions">
+                                        <!-- Colors will be dynamically generated here -->
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {{!-- <span>Promotions:
+                            Free shipping</span> --}}
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="related__title mt-5">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                {{#each relatedData}}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+
+                        <div class="product__item__pic set-bg" data-setbg="{{this.image.paths.[0]}}">
+                            <div class="label new">New</div>
+                            <ul class="product__hover">
+                                <li><a href="{{this.image.paths.[0]}}" class="image-popup"><span
+                                            class="arrow_expand"></span></a></li>
+
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="/productdetails/{{this._id}}">{{this.name}}</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">₹{{this.price}}</div>
+                        </div>
+
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+
+    <!-- Instagram Begin -->
+    <div class="instagram">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-1.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-2.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-3.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-4.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-5.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="/img/instagram/insta-6.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Instagram End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-7">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="/"><img src="/img/logo.png" alt=""></a>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            cilisis.</p>
+                        <div class="footer__payment">
+                            <a href="#"><img src="/img/payment/payment-1.png" alt=""></a>
+                            <a href="#"><img src="/img/payment/payment-2.png" alt=""></a>
+                            <a href="#"><img src="/img/payment/payment-3.png" alt=""></a>
+                            <a href="#"><img src="/img/payment/payment-4.png" alt=""></a>
+                            <a href="#"><img src="/img/payment/payment-5.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-5">
+                    <div class="footer__widget">
+                        <h6>Quick links</h6>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blogs</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="footer__widget">
+                        <h6>Account</h6>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-8">
+                    <div class="footer__newslatter">
+                        <h6>NEWSLETTER</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Email">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <div class="footer__copyright__text">
+                        <p>Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                            template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                    </div>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+                <button type="button" id="clear-search">Clear</button>
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+    <!-- Js Plugins -->
+
+    <script src="/js/landing/jquery-3.3.1.min.js"></script>
+    <script src="/js/landing/bootstrap.min.js"></script>
+    <script src="/js/landing/jquery.magnific-popup.min.js"></script>
+    <script src="/js/landing/jquery-ui.min.js"></script>
+    <script src="/js/landing/mixitup.min.js"></script>
+    <script src="/js/landing/jquery.countdown.min.js"></script>
+    <script src="/js/landing/jquery.slicknav.js"></script>
+    <script src="/js/landing/owl.carousel.min.js"></script>
+    <script src="/js/landing/jquery.nicescroll.min.js"></script>
+    <script src="/js/landing/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+
+
+    <script>
+
+
+        var sizedetailsJSON = {{{ sizedetailsJSON }}}; // Assuming sizedetailsJSON is your JSON data
+        console.log(sizedetailsJSON); // Check the parsed JSON object in the browser console
+
+
+        // Function to update available colors based on selected size
+        function updateAvailableColors(selectedSize) {
+            // Find the corresponding size details
+            const sizeDetails = sizedetailsJSON.find(detail => detail.size === selectedSize);
+
+            const colorOptionsDiv = $('#colorOptions');
+            colorOptionsDiv.empty();
+            if (sizeDetails && sizeDetails.availableColors && sizeDetails.availableColors.length > 0) {
+                sizeDetails.availableColors.forEach(color => {
+                    colorOptionsDiv.append(`
+                    <div style="display:inline;" >
+                <label for="${color.color}-btn"  >
+                    <input  type="radio" name="color__radio" id="${color.color}-btn" value="${color.color}" data-stock="${color.quantity}">
+                    
+                    <span class="checkmark ${color.color.toLowerCase()}-bg"></span>
+                </label>
+                <span id="${color.color}-quantity-info" class="color-quantity-info">(${color.quantity} left)</span>
+                </div>
+            `);
+                });
+            } else {
+                colorOptionsDiv.append(`<p>This size does not have any available colors.</p>`);
+            }
+        }
+
+        $(document).ready(function () {
+
+            $('#clear-search').click(function () {
+                $('#search-input').val('')
+            })
+
+
+            $('input[name="size__radio"]').on('change', function () {
+                const selectedSize = $(this).val();
+                updateAvailableColors(selectedSize);
+            });
+            const selectedColor = $(this).val();
+            const selectedColorStock = $(this).data('stock');
+            const quantityInput = document.getElementById('quantity');
+            const quantityValue = quantityInput.value;
+
+            // Display available quantity below the selected color
+            $(`#${selectedColor}-quantity-info`).text(`Available stock: ${selectedColorStock}`);
+
+            // {{!-- // Check if entered quantity is valid
+            // if (quantityValue <= 0 || quantityValue > selectedColorStock) {
+            //    Swal.fire({
+            //      text: 'Please enter a valid quantity within available stock.',
+            //     toast: true,
+            //    position: 'top',
+            //    showConfirmButton: false,
+            //     timer: 4000
+            // });
+            //    } --}}
+
+            // Initially update available colors based on the default selected size
+            const defaultSize = $('input[name="size__radio"]:checked').val();
+            updateAvailableColors(defaultSize);
+
+
+
+
+
+            $('.cart-btn').on('click', function (e) {
+                e.preventDefault();
+
+
+                var productName = "{{data.name}}";
+                var productPrice = parseInt(document.querySelector('.product__details__price').textContent.replace(/[^\d.]/g, ''))
+                var productImage = "{{data.image.paths.[0]}}";
+                var productId = "{{data._id}}";
+                var quantityInput = document.getElementById('quantity');
+
+                var quantityValue = quantityInput.value;
+
+                console.log(productPrice)
+
+                var selectedSize = $('input[name="size__radio"]:checked').val();
+                var selectedColor = $('input[name="color__radio"]:checked').val();
+
+
+                const selectedColorStock = $(`input[name="color__radio"][value="${selectedColor}"]`).data('stock');
+
+                if (!selectedSize || !selectedColor || isNaN(quantityValue) || quantityValue <= 0) {
+
+                    Swal.fire({
+
+                        text: 'Please select a size, color, and enter a valid quantity.',
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    return;
+                }
+
+
+
+                if (quantityValue > selectedColorStock) {
+                    Swal.fire({
+                        text: 'Please select a quantity within available stock.',
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    return;
+                }
+
+
+                var cartData = {
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    productId: productId,
+                    size: selectedSize,
+                    color: selectedColor,
+                    quantity: quantityValue,
+                    stockleft: selectedColorStock
+
+
+
+                };
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/addtoCart',
+                    contentType: 'application/json',
+                    data: JSON.stringify(cartData),
+                    success: function (response) {
+                        console.log(response)
+
+                        console.log('Item added to cart successfully!');
+
+                        Swal.fire({
+
+                            text: response.message,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000
+                        });
+                    },
+                    error: function (xhr, status, error) {
+
+                        if (xhr.status === 401) {
+                            Swal.fire({
+                                text: 'Please log in for adding to cart',
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 4000
+                            });
+                        } else {
+                            console.error('Error adding item to cart:', error);
+                            Swal.fire({
+                                text: 'An error occurred. Please try again later.',
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 4000
+                            });
+                        }
+                    }
+                });
+            });
+
+
+            $('.search-model-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Get the entered search text
+                const searchText = $('#search-input').val();
+
+                // Construct the URL with the search query as a parameter
+                const searchUrl = `/search?search=${encodeURIComponent(searchText)}`;
+
+                // Redirect to the search URL
+                window.location.href = searchUrl;
+            });
+
+
+
+
+        });
+
+
+
+        function addToWishlist(productId) {
+
+            event.preventDefault()
+            var productName = "{{data.name}}";
+            var productPrice = "{{data.price}}";
+            var quantityInput = document.getElementById('quantity');
+
+            var quantityValue = quantityInput.value;
+
+
+
+            var selectedSize = $('input[name="size__radio"]:checked').val();
+            var selectedColor = $('input[name="color__radio"]:checked').val();
+
+
+            const selectedColorStock = $(`input[name="color__radio"][value="${selectedColor}"]`).data('stock');
+
+            if (!selectedSize || !selectedColor || isNaN(quantityValue) || quantityValue <= 0) {
+
+                Swal.fire({
+
+                    text: 'Please select a size, color, and enter a valid quantity.',
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+                return;
+            }
+
+
+
+            if (quantityValue > selectedColorStock) {
+                Swal.fire({
+                    text: 'Please select a quantity within available stock.',
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+                return;
+            }
+
+
+            var cartData = {
+                name: productName,
+                price: productPrice,
+                size: selectedSize,
+                color: selectedColor,
+                quantity: quantityValue,
+                stockleft: selectedColorStock
+
+
+
+            };
+            console.log(cartData)
+
+
+            $.ajax({
+                url: '/addToWishlist',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ productId, cartData }),
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Product added to wishlist!',
+                        timer: 4000, // Duration in milliseconds
+                        toast: true,
+                        position: 'top', // Toast position
+                        showConfirmButton: false // Hide confirmation button
+                    });
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON.error,
+                            timer: 4000,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false
+                        });
+                    } else {
+                        console.error('Error adding product to wishlist:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error adding product to wishlist. Please try again.',
+                            timer: 4000,
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <!-- Include html2pdf bundle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <style>
+   
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+    {{> adminheader}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 d-flex flex-column align-items-start">
+                {{> adminsidebar}}
+                <div class="flex-grow-1"></div> <!-- This will make the sidebar expand to fill the available space -->
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <div class="container">
+                    <h1 class="mt-4 mb-4">Sales Data</h1>
+                    <!-- Filter options -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8"> <!-- Adjust column width as needed -->
+                                <div class="mb-3">
+                                    <div class="btn-group" role="group" aria-label="Date Range">
+                                        <button type="button" class="btn btn-outline-primary customBtn ml-2"
+                                            data-period="custom" id="customDateBtn" data-bs-toggle="modal"
+                                            data-bs-target="#customDateModal">Custom Date</button>
+                                        <button type="button" class="btn btn-outline-primary dayBtn ml-2"
+                                            data-period="day" id="dayBtn">Daily</button>
+                                        <button type="button" class="btn btn-outline-primary weekBtn ml-2"
+                                            data-period="week" id="weekBtn">Weekly</button>
+                                        <button type="button" class="btn btn-outline-primary  monthBtn ml-2"
+                                            data-period="month" id="monthBtn">Monthly</button>
+                                        <button type="button" class="btn btn-outline-primary allBtn ml-2"
+                                            data-period="all" id="allBtn">All</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4"> <!-- Adjust column width as needed -->
+                                <div class="d-flex justify-content-end mb-3" role="group" aria-label="Download">
+                                    <button type="button" class="btn btn-outline-success" id="pdfBtn">Download
+                                        PDF</button>
+                                    <button type="button" class="btn btn-outline-success ml-2" id="excelBtn">Download
+                                        Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coupon List Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">User </th>
+                                {{!-- <th scope="col">Valid From</th>--}}
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Ordered Date</th>
+                                {{!-- <td>status</td>--}}
+                                <th scope="col">Payment Method </th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            {{#each orders}}
+                            <tr>
+                                <td>{{addOne @index}}</td>
+                                <td>{{userId.firstname}}</td>
+                                {{!--<td>{{this.validFrom}}</td>--}}
+                                <td>
+                                    <ul>
+                                        {{#each this.productIds}}
+                                        <li>{{name}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </td>
+                                <td>{{this.formattedDate}}</td>
+                                {{!--<td>
+                                    {{#each this.products}}
+                                    <li>{{productStatus}}</li>
+                                    {{/each}}
+                                </td>--}}
+                                <td>{{this.paymentMethod}}</td>
+                                <td>{{this.amount}}</td>
+
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for custom date selection -->
+    <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customDateModalLabel">Custom Date Range</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="customDateForm">
+                        <div class="mb-3">
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" class="form-control" id="startDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" class="form-control" id="endDate" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmCustomDateBtn">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+
+
+    <!-- Custom JavaScript for Coupon Actions -->
+    <script>
+        $(document).ready(function () {
+            // $('#pdfBtn').click(function () {
+            //   const element = document.getElementById('ordersBody');
+            //   html2pdf(element, {
+            //      margin: 10,
+            //      filename: 'sales_report.pdf',
+            //      image: { type: 'jpeg', quality: 0.98 },
+            //       html2canvas: { dpi: 192, letterRendering: true },
+            //       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            //    }).from(element).save();
+            //    });
+            $('#pdfBtn').click(function () {
+                const element = document.getElementById('ordersBody');
+                html2pdf(element, {
+                    margin: 10,
+                    filename: 'sales_report.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { dpi: 192, letterRendering: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).from(element).save();
+            });
+
+
+
+            $('#excelBtn').click(function () {
+                const wb = XLSX.utils.table_to_book(document.getElementById('ordersBody'), { sheet: "Sheet JS" });
+                XLSX.writeFile(wb, 'sales_report.xlsx');
+            });
+
+
+
+            $('#customDateBtn').click(function () {
+                $('#customDateModal').modal('show'); // Show the modal manually
+            });
+
+            $('#confirmCustomDateBtn').click(function () {
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
+                var currenttDate=new Date()
+                var formattedCurrentDate=currenttDate.toISOString().split('T')[0]
+                if(startDate>formattedCurrentDate||endDate>formattedCurrentDate)
+                {
+                    
+                        Swal.fire({
+
+                            text: 'Please select dates in the past or today.',
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000
+                        });
+                    return
+                }
+
+                $.ajax({
+                    url: '/admin/salesReport',
+                    type: 'GET',
+                    data: {
+                        period: 'custom',
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    success: function (data) {
+                        $('#ordersBody').empty(); // Clear existing orders
+                        data.forEach(function (order, index) {
+                            $('#ordersBody').append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${order.userId.firstname}</td>
+                            <td>${order.productIds.map(p => p.name).join(', ')}</td>
+                            <td>${order.formattedDate}</td>
+                            <td>${order.paymentMethod}</td>
+                            <td>${order.amount}</td>
+                        </tr>
+                    `);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        alert('Error fetching orders');
+                    }
+                });
+
+            });
+
+
+
+            $('.dayBtn, .weekBtn, .monthBtn,.allBtn').click(function () {
+                var period = $(this).attr('data-period');
+                console.log(period)
+
+
+                $.ajax({
+                    url: '/admin/salesReport',
+                    type: 'GET',
+                    data: { period: period }, // Send period as part of the query parameters
+                    success: function (data) {              
+                        $('#ordersBody').empty(); // Clear existing orders
+                        data.forEach(function (order, index) {
+                            $('#ordersBody').append(`
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${order.userId.firstname}</td>
+                                    <td>${order.productIds.map(p => p.name).join(', ')}</td>
+                                    <td>${order.formattedDate}</td>
+                                    <td>${order.paymentMethod}</td>
+                                    <td>${order.amount}</td>
+                  `);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        alert('Error fetching orders');
+                    }
+                })
+            })
+
+        })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+     <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body>
+
+    {{>header}}
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-3 bg-light d-flex flex-column align-items-start">
+                {{>profilesidebar}}
+                <div class="flex-grow-1"></div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9 mt-5">
+
+
+                <h2>Order Management</h2>
+                <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>Order Date</th>
+            <th>Products</th>
+            <th>Payment Status</th>
+            <th>Coupon Discount</th>
+            <th>Paid Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orderdetails}}
+        <tr>
+            <td>Order {{addOne @index}}</td>
+            <td>{{this.formattedDate}}</td>
+            <td>
+                <ul>
+                    {{#each this.productDetails}}
+                    <li>{{this.name}}</li>
+                    {{/each}}
+                </ul>
+            </td>
+            <td>{{this.paymentStatus}}</td>
+            <td>{{#if this.couponId}}{{this.couponId.discountAmount}}{{else}}N/A{{/if}}</td>
+            <td>{{this.amount}}</td>
+           <td>
+                <a href="/orderDetails/{{this._id}}" class="btn btn-primary">
+                    See Details
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+               
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="returnModalLabel">Enter Return Reason</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="returnForm">
+                        <div class="mb-3">
+                            <label for="returnReason" class="form-label">Return Reason:</label>
+                            <input type="text" class="form-control" id="returnReason" name="returnReason">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Return</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.cancelOrderForm').each(function () {
+                // Find the status within this form
+                const status = $(this).find('.badge.bg-info').text().trim();
+                const returnBtn = $(this).find('.returnbtn');
+
+                // Check if the status is 'delivered' and show/hide the button accordingly
+                if (status.toLowerCase() === 'delivered') {
+                    returnBtn.show();
+                } else {
+                    returnBtn.hide();
+                }
+            });
+
+
+
+
+            $('.cancelOrderForm').submit(function (event) {
+                event.preventDefault();
+                const orderId = $(this).find('input[name="orderId"]').val()
+
+                let productIds = [];
+
+                // Loop through checked checkboxes to extract product IDs
+                $(this).find('input[name="productId"]:checked').each(function () {
+                    productIds.push($(this).val());
+                });
+
+                console.log('Order ID:', orderId);
+                console.log('Product IDs:', productIds);
+
+                if (productIds.length === 0) {
+                    // No checkboxes checked, show toast message
+
+                    Swal.fire({
+                        icon: 'warning',
+                        text: 'please select atleast one product',
+                        timer: 4000, // Duration in milliseconds
+                        toast: true,
+                        position: 'top', // Toast position
+                        showConfirmButton: false // Hide confirmation button
+                    });
+                    return; // Prevent further execution
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Once canceled, you cannot undo this action!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes'
+                })
+
+
+
+                    .then((confirmed) => {
+                        if (confirmed) {
+
+
+
+                            console.log('Order ID:', orderId);
+                            console.log('Product IDs:', productIds);
+
+                            // Example: Submit form via AJAX
+                            $.ajax({
+                                url: '/cancelOrder',
+                                method: 'POST',
+                                data: { orderId: orderId, productIds: productIds },
+                                success: function (response) {
+                                    {
+                                        //Swal.fire({
+                                        //      icon: 'success',
+                                        //      title: 'Success',
+                                        //      text: response.message,
+                                        //    timer: 4000, // Duration in milliseconds
+                                        //     toast: true,
+                                        //     position: 'top', // Toast position
+                                        //     showConfirmButton: false // Hide confirmation button
+                                        //  }); --}
+                                    }
+                                    setTimeout(function () {
+
+                                    }, 3000)
+                                    window.location.href = '/myOrder'; // Redirect upon successful cancel
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error(error); // Handle error
+                                    alert("err")
+                                }
+                            });
+                        }
+                    })
+            })
+            let productIdsForReturn = [];
+            let orderId
+
+            $('.returnbtn').click(function () {
+                productIdsForReturn = $(this).closest('.card').find('input[name="productId"]:checked').map(function () {
+                    return $(this).val();
+                }).get();
+                orderId = $(this).closest('.card').find('input[name="orderId"]').val()
+
+                console.log('Product IDs:', productIdsForReturn);
+                console.log('Product IDs:', orderId);
+
+                if (productIdsForReturn.length === 0) {
+                    // No checkboxes checked, show toast message
+
+                    Swal.fire({
+                        icon: 'warning',
+                        text: 'please select atleast one product',
+                        timer: 4000, // Duration in milliseconds
+                        toast: true,
+                        position: 'top', // Toast position
+                        showConfirmButton: false // Hide confirmation button
+                    });
+                    return; // Prevent further execution
+                }
+                else {
+                    $('#returnModal').modal('show');
+                }
+            });
+
+            $('#returnForm').submit(function (event) {
+                event.preventDefault();
+                //const orderId = $(this).closest('.card').find('input[name="orderId"]').val();
+                const returnReason = $('#returnReason').val().trim();
+
+                if (!returnReason) {
+                    alert('Please enter return reason');
+                    return;
+                }
+
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to return!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes'
+                })
+
+
+
+                    .then((confirmed) => {
+                        if (confirmed) {
+
+
+
+
+                            // Perform AJAX request for return
+                            $.ajax({
+                                url: '/returnOrder',
+                                method: 'POST',
+                                data: { orderId: orderId, returnReason: returnReason, productIds: productIdsForReturn },
+                                success: function (response) {
+                                    $('#returnModal').modal('hide');
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Return request submitted successfully',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+
+                                    setTimeout(function () {
+                                        // Redirect to the specified URL after the delay
+                                        window.location.href = '/myOrder';
+                                    }, 3000);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error(error);
+                                    alert('Failed to submit return request');
+                                }
+                            });
+                        }
+                    })
+            })
+
+
+            const orderDetails = {{{ orderDetailsJSON }}}
+       
+        const retryPaymentBtn = $('.retryPayment');
+        console.log(orderDetails);
+
+        retryPaymentBtn.on('click', async function () {
+            const orderIdToRetry = $(this).data('orderid'); // Assuming data-orderid attribute is set on the button
+
+        // Find the order in orderDetails array that matches the orderIdToRetry
+        const orderToRetry = orderDetails.find(order => order._id === orderIdToRetry);
+            try {
+                // Fetch endpoint to create Razorpay order
+                const response = await fetch('/createRazorpayOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: orderToRetry.amount
+                    }),
+                });
+                const data = await response.json();
+
+                if (data && data.orderId) {
+                    const orderId = data.orderId;
+                    const razorpayKey = data.key;
+
+                    const options = {
+                        key: razorpayKey, // Your Razorpay Key
+                        amount: data.amount * 100, // Amount in paisa
+                        currency: 'INR',
+                        order_id: orderId,
+                        handler: function (response) {
+                            if (response.razorpay_payment_id) {
+                                const productIdsArray = orderToRetry.productIds;
+                                const selectedAddressId = orderToRetry.addressId;
+                                const paymentmethod = orderToRetry.paymentMethod;
+                                const totalAmountInput = orderToRetry.amount;
+                                const couponIdInput = orderToRetry.couponId;
+
+                                // Send order details in the request body
+                                fetch('/placeOrderFailure', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ selectedAddressId, paymentmethod, productIds: productIdsArray.join(','), totalAmountInput, couponIdInput }), // Send order details as JSON
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log('Response:', data);
+                                        window.location.href = '/orderSuccess';
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            } else {
+                                console.error('Payment failed:', response.error);
+                                // Optionally, redirect to failure page or show an error message
+                            }
+                        },
+                        prefill: {
+                            // Add customer details if needed
+                        },
+                        notes: {
+                            // Add notes if needed
+                        },
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function (response) {
+                        console.error('Payment failed:', response.error);
+
+                        console.log('Failure data:', orderDetails);
+
+                        fetch('/orderFailure', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ failureData: orderDetails }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log("ppppp");
+                                    window.location.href = '/orderFailurePage';
+                                } else {
+                                    console.error('Failed to process order failure:', data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error processing order failure:', error.message);
+                            });
+                    });
+                    rzp.open(); // Open Razorpay payment modal
+                }
+            } catch (error) {
+                console.error('Error creating Razorpay order:', error);
+            }
+        });
+
+
+
+        })
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ashion </title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+
+
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+             <li><span class="icon_search search-switch"></span></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    {{#if User}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else if googleUser}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else}}
+                                    <!-- Show Nothing -->
+                                    {{/if}}
+                                </ul>
+                            </li>
+                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/category?category=Women">Women</a></li>
+                            <li><a href="/category?category=Men">Men</a></li>
+                            <li><a href="/category?category=Kids">kids</a></li>
+                            <li><a href="/category?category=Accessories">Accessories</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="header__right">
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                   {{#if User}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else if googleUser}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else}}
+                                    <!-- Show Nothing -->
+                                    {{/if}}
+                                </ul>
+                            </li>
+                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 mt-5">
+        <h2>Order Failed</h2>
+
+        <div class="card mb-4">
+            <div class="card-header">Order </div>
+            <div class="card-body">
+
+                <h6>Order Date: {{orderdetails.orderedDateFormatted}}</h6>
+                <h6>Status: {{orderdetails.paymentStatus}}</h6>
+                <h6>Payment method: {{orderdetails.paymentMethod}}</h6>
+                <h6>Amount: {{orderdetails.amount}}</h6>
+                <h6>Products:</h6>
+                <ul>
+                    {{#each orderdetails.productDetails}}
+                    <li>{{this.name}}</li>
+                    {{/each}}
+                </ul>
+               {{!-- <button id="retryPaymentBtn" class="btn btn-primary mt-3">Retry Payment</button>--}}
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</div>
+
+
+
+<!-- Instagram Begin -->
+<div class="instagram">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
+                    <div class="instagram__text">
+                        <i class="fa fa-instagram"></i>
+                        <a href="#">@ ashion_shop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Instagram End -->
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-7">
+                <div class="footer__about">
+                    <div class="footer__logo">
+                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        cilisis.</p>
+                    <div class="footer__payment">
+                        <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
+                        <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
+                        <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
+                        <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
+                        <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-5">
+                <div class="footer__widget">
+                    <h6>Quick links</h6>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blogs</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                <div class="footer__widget">
+                    <h6>Account</h6>
+                    <ul>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Orders Tracking</a></li>
+                        <li><a href="#">Checkout</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-8 col-sm-8">
+                <div class="footer__newslatter">
+                    <h6>NEWSLETTER</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Email">
+                        <button type="submit" class="site-btn">Subscribe</button>
+                    </form>
+                    <div class="footer__social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-youtube-play"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                <div class="footer__copyright__text">
+                    <p>Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                        template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
+                            href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                </div>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+             <button type="button" id="clear-search">Clear</button>
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<script src="/js/landing/jquery-3.3.1.min.js"></script>
+<script src="/js/landing/bootstrap.min.js"></script>
+<script src="/js/landing/jquery.magnific-popup.min.js"></script>
+<script src="/js/landing/jquery-ui.min.js"></script>
+<script src="/js/landing/mixitup.min.js"></script>
+<script src="/js/landing/jquery.countdown.min.js"></script>
+<script src="/js/landing/jquery.slicknav.js"></script>
+<script src="/js/landing/owl.carousel.min.js"></script>
+<script src="/js/landing/jquery.nicescroll.min.js"></script>
+<script src="/js/landing/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script>
+    const orderDetails = {{{ orderDetailsJSON }}};
+    document.addEventListener('DOMContentLoaded', function () {
+          $('#clear-search').click(function () {
+            $('#search-input').val(''); // Clear the input field
+        });
+        const retryPaymentBtn = document.getElementById('retryPaymentBtn');
+        console.log(orderDetails)
+        retryPaymentBtn.addEventListener('click', async function () {
+            try {
+
+                // Fetch endpoint to create Razorpay order
+                const response = await fetch('/createRazorpayOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: orderDetails.amount
+                    }),
+                });
+                const data = await response.json();
+
+                if (data && data.orderId) {
+                    const orderId = data.orderId;
+                    const razorpayKey = data.key
+                    //const storedCouponId = couponId;
+                    const options = {
+                        key: razorpayKey, // Your Razorpay Key
+                        amount: data.amount * 100, // Amount in paisa
+                        currency: 'INR',
+                        order_id: orderId,
+                        //callback_url:"/isOrderCompleted",
+                        handler: function (response) {
+                            //  alert("abcd")
+                            if (response.razorpay_payment_id) {
+
+                                const productIdsArray = orderDetails.productIds;
+
+                                // Convert array to string with comma separation
+                                const productIds = productIdsArray.join(',');
+                                const selectedAddressId = orderDetails.addressId
+                                const paymentmethod = orderDetails.paymentMethod
+                               // const productIds = orderDetails.productIds
+                                const totalAmountInput = orderDetails.amount
+                                const couponIdInput = orderDetails.couponId
+
+
+                                // Send order details in the request body
+                                fetch('/placeOrderFailure', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ selectedAddressId, paymentmethod, productIds, totalAmountInput, couponIdInput }), // Send order details as JSON
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                // Handle response from the server as needed
+                                  console.log('Response:', data); // You can check for success messages or errors
+                                   window.location.href='/orderSuccess'
+                                  })
+                                 .catch(error => {
+                                     console.error('Error:', error);
+                                  }); 
+
+                            } else {
+                                //Payment failure
+                                console.error('Payment failed:', response.error);
+                                // Optionally, redirect to failure page or show an error message
+
+
+                            }
+
+                        },
+                        prefill: {
+                            // Add customer details if needed
+                        },
+                        notes: {
+
+
+                        },
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function (response) {
+                        // Handle failed payment if needed
+                        console.error('Payment failed:', response.error);
+
+
+                        console.log('Failure data:', orderDetails);
+
+
+
+                        console.log(JSON.stringify(failureData));
+
+                        fetch('/orderFailure', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ failureData: orderDetails }),
+                        }).then(response => response.json())
+                            .then(data => {
+                                // Redirect to order failure page with failureData details
+                                if (data.success) {
+                                    console.log("ppppp")
+                                    window.location.href = '/orderFailurePage'; // Update with your failure page URL
+                                } else {
+                                    console.error('Failed to process order failure:', data.message);
+                                    // Show an error message or handle the error as needed
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error processing order failure:', error.message);
+                                // Show an error message or handle the error as needed
+                            });
+
+
+                    });
+                    rzp.open(); // Open Razorpay payment modal
+                }
+            } catch (error) {
+                console.error('Error creating Razorpay order:', error);
+                // Handle error or show a message to the user
+            }
+
+        });
+    });
+
+</script>
+</body>
+
+</html>

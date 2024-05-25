@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Optional CSS styles for better appearance */
+        #chartContainer {
+            border: 1px solid #ddd;
+            /* Optional border for the container */
+            margin-bottom: 20px;
+            /* Optional margin for spacing */
+            margin-top: 10px;
+        }
+
+        .summary-cards .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .summary-cards .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .summary-cards .card .card-body {
+            padding: 20px;
+        }
+
+        .summary-cards .card .card-title {
+            font-size: 1.2rem;
+        }
+
+        .summary-cards .card .card-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .summary-cards .card.bg-warning {
+            background-color: #ffc107;
+        }
+
+        .summary-cards .card-title,
+        .summary-cards .card-text {
+            color: white;
+        }
+        .card-custom {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-custom .card-header {
+    background-color: #ffc107;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.card-custom .card-body {
+    padding: 15px;
+}
+
+.card-custom .list-group-item {
+    border: none;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.card-custom .list-group-item:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+.card-custom .card-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-custom .list-group-item {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+    </style>
+
+</head>
+
+<body>
+    {{> adminheader}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 d-flex flex-column align-items-start">
+                {{> adminsidebar}}
+                <div class="flex-grow-1"></div> <!-- This will make the sidebar expand to fill the available space -->
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <div class="container">
+                    <h1 class="mt-4 mb-4"></h1>
+                    <!-- Filter options -->
+                    <div class="container">
+                        <div class="row">
+                            <main class="d-flex justify-content-center align-items-center">
+                                <div class="container mt-4">
+                                    <h1> Dashboard</h1>
+
+                                    <!-- Summary Cards -->
+                                    <div class="row summary-cards mt-4">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card bg-warning text-white text-center">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Total Products</h5>
+                                                    <p class="card-text" id="totalProducts">{{count}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card bg-warning text-white text-center">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Total Orders</h5>
+                                                    <p class="card-text" id="totalOrders">{{orderCount}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card bg-warning text-white text-center">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Total Users</h5>
+                                                    <p class="card-text" id="totalUsers">{{userCount}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="chartContainer" style="height: 400px; overflow-y: auto;">
+                                        <canvas id="salesChart" width="800" height="400"></canvas>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center my-3">
+                                        <div class="input-group w-auto">
+                                            <label class="input-group-text" for="interval">Select Interval:</label>
+                                            <select id="interval" class="form-select">
+                                                <option value="monthly">Monthly</option>
+                                                <option value="yearly">Yearly</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary" onclick="fetchSalesData()">Fetch Data</button>
+                                    </div>
+
+                                    <!-- Top Products and Categories Section -->
+                                    <div class="container my-4">
+                                        <div class="row">
+                                            <!-- Top Products Card -->
+                                            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                                                <div class="card mb-3 w-100 shadow-sm card-custom">
+                                                    <div class="card-header bg-warning text-center">
+                                                        <h5 class="card-title m-0">Top Products</h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <ul class="list-group list-group-flush">
+                                                            {{#each productSalesData}}
+                                                            <li class="list-group-item text-center">{{this.productName}}
+                                                            </li>
+                                                            {{/each}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Top Categories Card -->
+                                            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                                                <div class="card mb-3 w-100 shadow-sm card-custom">
+                                                    <div class="card-header bg-warning text-center">
+                                                        <h5 class="card-title m-0">Top Categories</h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <ul class="list-group list-group-flush">
+                                                            {{#each categorySalesData}}
+                                                            <li class="list-group-item text-center">{{categoryName}}
+                                                            </li>
+                                                            {{/each}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </main>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- Bootstrap JS and jQuery -->
+        <script src="script.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                fetchSalesData();
+            });
+            const salesChart = document.getElementById('salesChart').getContext('2d');
+            let chartInstance = null;
+
+            const fetchSalesData = async () => {
+                const interval = document.getElementById('interval').value;
+
+                try {
+                    const response = await fetch(`/admin/sales-data?interval=${interval}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    renderChart(data, interval);
+                } catch (error) {
+                    console.error('There was a problem with your fetch operation:', error);
+                }
+            };
+
+            const renderChart = (data, interval) => {
+
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                const labels = data.map(item => interval === 'monthly' ? item.label : item.label.slice(5));
+                const actualSales = data.map(item => item.actualSales);
+                const expectedSales = data.map(item => item.expectedSales);
+
+                chartInstance = new Chart(salesChart, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Actual Sales',
+                                backgroundColor: 'blue',
+                                data: actualSales
+                            },
+                            {
+                                label: 'Expected Sales',
+                                backgroundColor: 'green',
+                                data: expectedSales
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 1.5,
+                        title: {
+                            display: true,
+                            text: `Sales Data (${interval.charAt(0).toUpperCase() + interval.slice(1)})`
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            };
+        </script>
+</body>
+
+</html>

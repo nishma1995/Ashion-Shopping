@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <script src="/js/validateform.js"></script>
+
+    <style>
+        .sidebar {
+            height: 100vh;
+
+            overflow-y: auto;
+
+        }
+    </style>
+</head>
+
+<body>
+    {{>header}}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 bg-light d-flex flex-column align-items-start">
+                {{>profilesidebar}}
+                <div class="flex-grow-1"></div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9 mt-5">
+
+
+                <form action="/addAddress" method="get">
+                    <div class="text-end mb-3">
+                        <button type="submit" class="btn btn-secondary">Add new Address</button>
+                    </div>
+                </form>
+                {{#each details}}
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.address_type}}</h5>
+
+                        <div class="mb-3">
+                            <label for="address1" class="form-label">Address:</label>
+                            <textarea class="form-control" id="address_{{this._id}}" name="address1" rows="3" required
+                                readonly>
+                                {{this.firstname}},{{this.lastname}},{{this.email}},
+                                {{this.phonenumber}},{{this.address}},{{this.city}}
+                                {{this.state}},{{this.pincode}},{{this.landmark}}
+                            </textarea>
+                            <div class="mt-4 text-end">
+                                <form action="/editAddress/{{this._id}}" method="GET" style="display: inline;">
+                                    <button type="submit" class="btn btn-secondary">Update</button>
+                                </form>
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="confirmDelete('{{this._id}}')">Remove</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{/each}}
+
+
+
+                <!-- Bootstrap JS -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+                <script>
+                    function confirmDelete(addressId) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You won\'t be able to revert this!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If user confirms, send delete request to server
+
+                                $.ajax({
+                                    type: 'DELETE',
+                                    url: '/deleteAddress/' + addressId,
+                                    success: function (response) {
+
+                                        console.log(response);
+
+                                        $('#address_' + addressId).closest('.card').remove();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success!',
+                                            text: 'Address deleted successfully!',
+                                            toast: true,
+                                            position: 'top',
+                                            showConfirmButton: false,
+                                            timer: 4000
+                                        });
+                                    },
+                                    error: function (xhr, status, error) {
+
+                                        console.error('Error deleting address:', error);
+                                    }
+                                });
+                            } else {
+
+                                console.log("Delete action canceled.");
+                            }
+                        });
+                    }
+                </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <!-- Include Bootstrap CSS via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        #wrapper {
+            display: flex;
+        }
+
+        #sidebar-wrapper {
+            width: 250px;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #232222;
+            padding-top: 20px;
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            font-size: 1.2rem;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            color: #151515;
+            background-color: #f4f4f4;
+            border: none;
+            border-radius: 0;
+            transition: 0.3s;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: #cabfbf;
+        }
+
+        #sidebar-wrapper .list-group-item i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="d-flex" id="wrapper">
+
+            <!-- Sidebar -->
+            <div class="" id="sidebar-wrapper">
+
+                <div class="sidebar-heading"><i class="fas fa-user-cog mr-2"></i>My Profile
+                    <hr class="my-2">
+                </div>
+                <div class="list-group list-group-flush">
+                   <a href="/myprofile" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user"></i>My profile
+                    </a>
+                    <a href="/addresses" class="list-group-item list-group-item-action">
+                        <i class="fas fa-address-book"></i>My Addresses
+                    </a>
+                   
+                    <a href="/myorder" class="list-group-item list-group-item-action">
+                        <i class="fas fa-box"></i>My Orders
+                    </a>
+                    <a href="/wishlist" class="list-group-item list-group-item-action">
+                       <i class="fas fa-folder fa-heart"></i>WishList
+                    </a>
+                   {{!--<a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-alt"></i>Coupons
+                    </a>--}}
+                    <a href="/changepassword" class="list-group-item list-group-item-action">
+                        <i class="fas fa-key"></i>Change Password
+                    </a>
+                    <a href="/wallet" class="list-group-item list-group-item-action">
+                       <i class="fas fa-wallet"></i>Wallet
+                    </a>
+                    <a href="/logout" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-line"></i>LogOut
+                    </a>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+        </div>
+    </section>
+    <!-- Optional JavaScript; choose one of the two! -->
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+   
+</body>
+</html>

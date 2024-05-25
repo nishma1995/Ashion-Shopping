@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+
+</head>
+
+<body>
+    {{> adminheader}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3  d-flex flex-column align-items-start">
+                {{> adminsidebar}}
+                <div class="flex-grow-1"></div> <!-- This will make the sidebar expand to fill the available space -->
+            </div>
+
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <form action="/admin/addProduct" method="post" class="mx-auto mt-5" style="max-width: 800px;"
+                    enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="title mb-4">Add Product</h4>
+
+                            <!-- Product Name -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" id="" class="brand-dropdown" required>
+                                    {{#each categories}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+
+                                <!-- Sizes Side by Side -->
+                                <!-- Sizes Side by Side -->
+                                <div class="row mb-3 mt-3">
+                                    <div class="col">
+                                        <!-- Size Small -->
+                                        <h3>Size Small</h3>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="sizeS" name="S"
+                                                value="S">
+                                            <label class="form-check-label" for="sizeS">Size S</label>
+                                        </div>
+                                        <!-- Color S Checkboxes -->
+                                        <div class="mb-2">
+                                            <label class="form-label">Colors:</label>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorS1"
+                                                    name="colorS[Red]" value="Red">
+                                                <label class="form-check-label" for="colorS1">Red</label>
+                                                <input type="number" class="form-control" name="quantityS[Red]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorS2"
+                                                    name="colorS[Blue]" value="Blue">
+                                                <label class="form-check-label" for="colorS2">Blue</label>
+                                                <input type="number" class="form-control" name="quantityS[Blue]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorS3"
+                                                    name="colorS[White]" value="White">
+                                                <label class="form-check-label" for="colorS3">White</label>
+                                                <input type="number" class="form-control" name="quantityS[White]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Size Medium -->
+                                        <h3>Size Medium</h3>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="sizeM" name="M"
+                                                value="M">
+                                            <label class="form-check-label" for="sizeM">Size M</label>
+                                        </div>
+                                        <!-- Color M Checkboxes -->
+                                        <div class="mb-2">
+                                            <label class="form-label">Colors:</label>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorM1"
+                                                    name="colorM[Red]" value="Red">
+                                                <label class="form-check-label" for="colorM1">Red</label>
+                                                <input type="number" class="form-control" name="quantityM[Red]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorM2"
+                                                    name="colorM[Blue]" value="Blue">
+                                                <label class="form-check-label" for="colorM2">Blue</label>
+                                                <input type="number" class="form-control" name="quantityM[Blue]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorM3"
+                                                    name="colorM[White]" value="White">
+                                                <label class="form-check-label" for="colorM3">White</label>
+                                                <input type="number" class="form-control" name="quantityM[White]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Size Large -->
+                                        <h3>Size Large</h3>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="sizeL" name="L"
+                                                value="L">
+                                            <label class="form-check-label" for="sizeL">Size L</label>
+                                        </div>
+                                        <!-- Color L Checkboxes -->
+                                        <div class="mb-2">
+                                            <label class="form-label">Colors:</label>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorL1"
+                                                    name="colorL[Red]" value="Red">
+                                                <label class="form-check-label" for="colorL1">Red</label>
+                                                <input type="number" class="form-control" name="quantityL[Red]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorL2"
+                                                    name="colorL[Blue]" value="Blue">
+                                                <label class="form-check-label" for="colorL2">Blue</label>
+                                                <input type="number" class="form-control" name="quantityL[Blue]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="colorL3"
+                                                    name="colorL[White]" value="White">
+                                                <label class="form-check-label" for="colorL3">White</label>
+                                                <input type="number" class="form-control" name="quantityL[White]"
+                                                    placeholder="Quantity" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    {{#if error}}
+                                    <span style="color:red">{{error}}</span>
+                                    {{/if}}
+                                    <!-- Cost -->
+                                    <div class="mb-3">
+                                        <label for="cost" class="form-label">Cost</label>
+                                        <input type="number" class="form-control" name="cost" required>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select class="form-select" name="status" required>
+                                            <option value="true">Active</option>
+                                            <option value="false">Inactive</option>
+                                            <!-- Add more options as needed -->
+                                        </select>
+                                    </div>
+                                    <!-- Description -->
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <input type="text" class="form-control" name="description" required>
+                                    </div>
+
+                                    <!-- Image Inputs with Cropper -->
+                                    <div class="mb-3">
+                                        <label for="productImage1" class="form-label">Image 1</label>
+                                        <input type="file" class="form-control" id="productImage1" name="image[]"
+                                            accept="image/*" onchange="openCropperModal(this, 1)">
+                                        <img id="imagePreview1" src="/img/placeholder.jpg" alt="Image Preview"
+                                            style="width: 100px; height: 100px; margin-top: 10px;">
+                                        <button type="button" onclick="deleteImage(1)">Delete</button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="productImage2" class="form-label">Image 2</label>
+                                        <input type="file" class="form-control" id="productImage2" name="image[]"
+                                            accept="image/*" onchange="openCropperModal(this, 2)">
+                                        <img id="imagePreview2" src="/img/placeholder.jpg" alt="Image Preview"
+                                            style="width: 100px; height: 100px; margin-top: 10px;">
+                                        <button type="button" onclick="deleteImage(2)">Delete</button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="productImage3" class="form-label">Image 3</label>
+                                        <input type="file" class="form-control" id="productImage3" name="image[]"
+                                            accept="image/*" onchange="openCropperModal(this, 3)">
+                                        <img id="imagePreview3" src="/img/placeholder.jpg" alt="Image Preview"
+                                            style="width: 100px; height: 100px; margin-top: 10px;">
+                                        <button type="button" onclick="deleteImage(3)">Delete</button>
+                                    </div>
+
+                                    <!-- Save and Cancel Buttons -->
+                                    <div class="mt-3">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="button" class="btn btn-secondary ml-2" id="cancelBtn"
+                                            onclick="cancelAction()">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper Modal -->
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropperModalLabel">Crop Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="cropperImage" src="" alt="Image to crop">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="cropImage()">Crop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+        function confirmDelete(categoryId) {
+            var result = window.confirm("Are you sure you want to delete this user?");
+            if (result) {
+                // If user clicks "OK" in the dialog, send a DELETE request using AJAX
+                $.ajax({
+                    url: '/admin/deleteProduct/' + productId,
+                    type: 'DELETE',
+                    success: function (data) {
+                        // Successful deletion, you can handle the response as needed
+                        console.log('product deleted successfully');
+
+                        // Successful deletion, you can handle the response as needed
+                        console.log('product deleted successfully');
+
+                        // Update the UI here, e.g., remove the table row
+                        $('#row' + productId).remove();
+
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here
+                        console.error('Failed to delete product:', error);
+                    }
+                });
+            }
+        }
+
+
+        function previewAndDeleteImage(input, number) {
+            const previewId = `imagePreview${number}`;
+            const file = input.files[0];
+            const preview = document.getElementById(previewId);
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Clear the preview if no file is selected
+                preview.src = "";
+            }
+        }
+
+        function deleteImage(number) {
+            const inputId = `productImage${number}`;
+            const previewId = `imagePreview${number}`;
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            // Clear the input value and preview
+            input.value = "";
+            preview.src = "";
+        }
+
+
+        function cancelAction() {
+            window.location.href = '/admin/productManagement';
+            // alert('Cancel button clicked!');
+        }
+
+        let cropper;
+        let currentInputId;
+
+        function openCropperModal(input, number) {
+            currentInputId = `productImage${number}`;
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const image = document.getElementById('cropperImage');
+                    image.src = e.target.result;
+                    $('#cropperModal').modal('show');
+                    setTimeout(() => {
+                        cropper = new Cropper(image, {
+                            aspectRatio: 1,
+                            viewMode: 3,
+                            autoCropArea: 1,
+                        });
+                    }, 300);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function cropImage() {
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const previewImage = document.getElementById(`imagePreview${currentInputId.replace('productImage', '')}`);
+                previewImage.src = url;
+                const input = document.getElementById(currentInputId);
+                const dataTransfer = new DataTransfer();
+                const file = new File([blob], `${currentInputId}.jpg`, { type: 'image/jpeg' });
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+                $('#cropperModal').modal('hide');
+                cropper.destroy();
+            }, 'image/jpeg');
+        }
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

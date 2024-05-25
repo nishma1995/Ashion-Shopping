@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+
+<body>
+    {{> adminheader}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 d-flex flex-column align-items-start">
+                {{> adminsidebar}}
+                <div class="flex-grow-1"></div> <!-- This will make the sidebar expand to fill the available space -->
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <div class="container">
+                    <h1 class="mt-4 mb-4">Coupon Management</h1>
+                    <!-- Add Coupon Button -->
+                    <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal"
+                        data-bs-target="#addCouponModal">
+                        Add Coupon
+                    </button>
+                    <!-- Coupon List Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Coupon Code</th>
+                                 <th scope="col">Discount </th>
+                               {{!-- <th scope="col">Valid From</th>--}}
+                                <th scope="col">Valid Until</th>
+                                <th scope="col">Max Uses</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each couponData}}
+                            <tr>
+                                <td>{{this.code}}</td>
+                                 <td>{{this.discountAmount}}</td>
+                                {{!--<td>{{this.validFrom}}</td>--}}
+                                <td>{{this.validUntilFormatted}}</td>
+                                <td>{{this.maxUses}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#editCouponModal{{this._id}}">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                        onclick="deleteCoupon('{{this._id}}')">Delete</button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Coupon Modal -->
+    <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="couponCode" class="form-label">Coupon Code</label>
+                            <input type="text" class="form-control" id="couponCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="discountAmount" class="form-label">Discount Amount</label>
+                            <input type="number" class="form-control" id="discountAmount" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="validUntil" class="form-label">Valid Until</label>
+                            <input type="date" class="form-control" id="validUntil" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="maxUses" class="form-label">Max Uses</label>
+                            <input type="number" class="form-control" id="maxUses" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveCouponBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Edit Coupon Modals -->
+    <!-- Edit Coupon Modals -->
+    {{#each couponData}}
+    <div class="modal fade" id="editCouponModal{{this._id}}" tabindex="-1" role="dialog"
+        aria-labelledby="editCouponModalLabel{{this._id}}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCouponModalLabel{{this._id}}">Edit Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editCouponCode{{this._id}}" class="form-label">Coupon Code</label>
+                            <input type="text" class="form-control" id="editCouponCode{{this._id}}"
+                                value="{{this.code}}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDiscountAmount{{this._id}}" class="form-label">Discount Amount</label>
+                            <input type="number" class="form-control" id="editDiscountAmount{{this._id}}"
+                                value="{{this.discountAmount}}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editValidUntil{{this._id}}" class="form-label">Valid Until</label>
+                            <input type="date" class="form-control" id="editValidUntil{{this._id}}"
+                                value="{{this.validUntilFormatted}}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMaxUses{{this._id}}" class="form-label">Max Uses</label>
+                            <input type="number" class="form-control" id="editMaxUses{{this._id}}"
+                                value="{{this.maxUses}}" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateCoupon('{{this._id}}')">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+
+    <!-- Custom JavaScript for Coupon Actions -->
+    <script>
+        document.getElementById('saveCouponBtn').addEventListener('click', function () {
+
+            const code = document.getElementById('couponCode').value
+            const discountAmount = document.getElementById('discountAmount').value
+            const validUntil = document.getElementById('validUntil').value
+            const maxUses = document.getElementById('maxUses').value
+
+
+
+
+
+            if (!couponCode || !discountAmount || !maxUses || !validUntil) {
+              
+                    // Show an alert or notification that all fields are required
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Please fill in all fields.',
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    return; // Stop execution if any field is empty
+            }
+            
+
+            const couponData = {
+                code: code,
+                discountAmount: discountAmount,
+                validUntil: validUntil,
+                maxUses: maxUses
+            };
+            $.ajax({
+                type: 'POST',
+                url: "/admin/addCoupon",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(couponData),
+
+                success: function (response) {
+                    // alert(response.message); // 
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    $('#addCouponModal').trigger('reset'); // Clear form fields
+                    // $('#addCouponModal').modal('hide'); // Hide modal after successf
+                    setTimeout(() => {
+                        // Reload the window
+                        window.location.reload();
+                    }, 3000);
+
+                },
+                error: function (xhr, status, error) {
+                    //alert(xhr.responseJSON.error); // Display error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: xhr.responseJSON.error,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+
+                    console.error(error);
+                }
+            })
+        })
+
+        function updateCoupon(couponId) {
+            
+            const code = document.getElementById(`editCouponCode${couponId}`).value;
+            const discountAmount = document.getElementById(`editDiscountAmount${couponId}`).value;
+            const validUntil = document.getElementById(`editValidUntil${couponId}`).value;
+            const maxUses = document.getElementById(`editMaxUses${couponId}`).value;
+
+            const couponData = {
+                code: code,
+                discountAmount: discountAmount,
+                validUntil: validUntil,
+                maxUses: maxUses
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: `/admin/updateCoupon/${couponId}`, // Adjust the URL as per your backend route
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(couponData),
+                success: function (response) {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    setTimeout(() => {
+                        // Reload the window
+                        window.location.reload();
+                    }, 3000);
+
+
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: xhr.responseJSON.error,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    console.error(error);
+                }
+            });
+        }
+
+
+        function deleteCoupon(couponId) {
+    // Send a confirmation dialog before deleting
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed, proceed with deletion
+            $.ajax({
+                type: 'DELETE',
+                url: `/admin/deleteCoupon/${couponId}`, // Adjust the URL as per your backend route
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted!',
+                        text: response.message,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    // Reload the page after deletion
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: xhr.responseJSON.error,
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    console.error(error);
+                }
+            });
+        }
+    });
+}
+
+    </script>
+</body>
+
+</html>

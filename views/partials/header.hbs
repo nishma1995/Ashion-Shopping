@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ashion</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    {{#if User}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else if googleUser}}
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    {{else}}
+                                    <!-- Show Nothing -->
+                                    {{/if}}
+                                </ul>
+                            </li>
+                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="/img/logo.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__auth">
+            <a href="/user/login">Login</a>
+            <a href="/user/register">Register</a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/category?category=Women">Women</a></li>
+                            <li><a href="/category?category=Men">Men</a></li>
+                            <li><a href="/category?category=Kids">kids</a></li>
+                            <li><a href="/category?category=Accessories">Accessories</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="header__right">
+                        <div class="header__right__auth">
+
+                        </div>
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                            {{!--<li class="dropdown">
+                                <a class="dropdown-toggle" href="#" role="button" id="userDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                               <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <!-- Dropdown menu items -->
+                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            </li>--}}
+                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+                <button type="button" id="clear-search">Clear</button>
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <script src="/js/landing/jquery-3.3.1.min.js"></script>
+    <script src="/js/landing/bootstrap.min.js"></script>
+    <script src="/js/landing/jquery.magnific-popup.min.js"></script>
+    <script src="/js/landing/jquery-ui.min.js"></script>
+    <script src="/js/landing/mixitup.min.js"></script>
+    <script src="/js/landing/jquery.countdown.min.js"></script>
+    <script src="/js/landing/jquery.slicknav.js"></script>
+    <script src="/js/landing/owl.carousel.min.js"></script>
+    <script src="/js/landing/jquery.nicescroll.min.js"></script>
+    <script src="/js/landing/main.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#clear-search').click(function () {
+                $('#search-input').val(''); // Clear the input field
+            });
+            // Capture form submission
+            $('.search-model-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Get the entered search text
+                const searchText = $('#search-input').val();
+
+                // Construct the URL with the search query as a parameter
+                const searchUrl = `/search?search=${encodeURIComponent(searchText)}`;
+
+                // Redirect to the search URL
+                window.location.href = searchUrl;
+            });
+
+        });
+
+    </script>
+</body>
+
+
+</html>
