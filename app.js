@@ -79,7 +79,7 @@ hbs.handlebars.registerHelper('eq', function(arg1, arg2, options) {
 });
 
 hbs.registerHelper('calculatePersatage',function(value1,value2){ 
-  console.log(value1+'  '+value2) 
+ 
   let persantage=parseInt(value1) 
   let amount=parseInt(value2) 
   if(isNaN(value1)||isNaN(value2)){ 

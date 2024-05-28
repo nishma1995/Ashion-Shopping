@@ -1306,6 +1306,7 @@ const orderFailure = async (req, res) => {
       }
 
       await newOrder.save()
+      const cartItemsToRemove = await cart.deleteMany({ productId: { $in: productIdsArray }, userId: userId });
       return res.status(200).json({ success: true, message: 'Order failure processed successfully', orderId: newOrder._id });
     }
 

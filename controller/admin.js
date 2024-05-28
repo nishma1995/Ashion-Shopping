@@ -28,7 +28,7 @@ const post_login = async (req, res) => {
   if (email === ADMIN_USERNAME) {
     if (password === ADMIN_PASSWORD) {
       req.session.isAdminAuthenticated = true
-      const userData = await user.find()
+      const userData = await user.find({deleted:false})
       res.render("admin/userManagement", { userData });
     } else {
       res.render("admin/adminLogIn", { error: "Invalid Password" });
@@ -210,6 +210,7 @@ const SalesData = async (req, res) => {
 
 const get_UserManagement = async (req, res) => {
   const userData = await user.find({ deleted: false })
+  
   res.render("admin/userManagement", { userData });
 }
 
@@ -217,8 +218,9 @@ const getDelete = async (req, res) => {
   try {
 
     const userId = req.params.id;
-
+   
     const users = await user.findByIdAndUpdate(userId, { deleted: true });
+    console.log(users)
 
     if (!users) {
       return res.status(404).json({ error: 'user not found' });

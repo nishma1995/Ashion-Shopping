@@ -91,9 +91,9 @@ router.get("/cart",isUserAuthenticated,cart.cartPage)
 router.put("/updatecart/:productId",isUserAuthenticated,cart.updatecart)
 router.delete("/remove",isUserAuthenticated,cart.remove)
 
-router.post("/availability",isUserAuthenticated,user.availability)
-router.get("/sort/priceLowToHigh",isUserAuthenticated,user.lowToHigh)
-router.get("/sort/priceHighToLow",isUserAuthenticated,user.HighToLow)
+router.post("/availability",user.availability)
+router.get("/sort/priceLowToHigh",user.lowToHigh)
+router.get("/sort/priceHighToLow",user.HighToLow)
 
 router.get('/checkout',isUserAuthenticated,user.checkout)
 router.post('/placeOrder',isUserAuthenticated,user.placeorder)

@@ -41,32 +41,32 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
-           <li><span class="icon_search search-switch"></span></li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <i class="fa fa-user"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                    {{#if User}}
-                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
-                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
-                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
-                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                                    {{else if googleUser}}
-                                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
-                                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
-                                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
-                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                                    {{else}}
-                                    <!-- Show Nothing -->
-                                    {{/if}}
-                                </ul>
-                            </li>
-                            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
+            <li><span class="icon_search search-switch"></span></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa fa-user"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    {{#if User}}
+                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    {{else if googleUser}}
+                    <li><a class="dropdown-item" href="/myprofile">My Profile</a></li>
+                    <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="/myorder">Orders</a></li>
+                    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    {{else}}
+                    <!-- Show Nothing -->
+                    {{/if}}
+                </ul>
+            </li>
+            <li><a href="/cart"><i class="fa fa-shopping-cart"></i></a></li>
+        </ul>
         <div class="offcanvas__logo">
             <a href="./index.html"><img src="img/logo.png" alt=""></a>
         </div>
@@ -154,7 +154,7 @@
 
     <div class="col-md-9 mt-5">
         <h2>Order Success Details</h2>
-     
+
         <div class="card mb-4">
             <div class="card-header">Order </div>
             <div class="card-body">
@@ -169,21 +169,25 @@
                     <li>{{this.name}}</li>
                     {{/each}}
                 </ul>
-            </div>
-            </div>
+                <div class="mb-4">
+                    <a href="/myorder" class="btn btn-primary mt-3">Go to Orders</a>
+                </div>
             </div>
         </div>
-        </body>
     </div>
 
- <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="cart__btn">
-                        <a href="/">Continue Shopping</a>
-                    </div>
-                </div>
-                
+    </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="cart__btn">
+                <a href="/">Continue Shopping</a>
             </div>
+        </div>
+
+    </div>
 
     <!-- Instagram Begin -->
     <div class="instagram">
@@ -324,7 +328,7 @@
             <div class="search-close-switch">+</div>
             <form class="search-model-form">
                 <input type="text" id="search-input" placeholder="Search here.....">
-                 <button type="button" id="clear-search">Clear</button>
+                <button type="button" id="clear-search" class="btn btn-primary">Clear</button>
             </form>
         </div>
     </div>
@@ -348,7 +352,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            
+
 
             const editButtons = document.querySelectorAll('.editbtn');
 
@@ -431,21 +435,21 @@
 
         });
 
-          $(document).ready(function() {
-    // Capture form submission
-    $('.search-model-form').on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        $(document).ready(function () {
+            // Capture form submission
+            $('.search-model-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
 
-        // Get the entered search text
-        const searchText = $('#search-input').val();
+                // Get the entered search text
+                const searchText = $('#search-input').val();
 
-        // Construct the URL with the search query as a parameter
-        const searchUrl = `/search?search=${encodeURIComponent(searchText)}`;
+                // Construct the URL with the search query as a parameter
+                const searchUrl = `/search?search=${encodeURIComponent(searchText)}`;
 
-        // Redirect to the search URL
-        window.location.href = searchUrl;
-    });
-});
+                // Redirect to the search URL
+                window.location.href = searchUrl;
+            });
+        });
 
 
 

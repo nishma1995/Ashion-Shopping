@@ -452,7 +452,7 @@
             <form class="search-model-form">
                 <input type="text" id="search-input" placeholder="Search here.....">
                 
-            <button type="button" id="clear-search">Clear</button>
+             <button type="button" id="clear-search" class="btn btn-primary">Clear</button>
             </form>
         </div>
     </div>
@@ -505,7 +505,7 @@
 
             editButtons.forEach(function (button) {
                 button.addEventListener('click', function () {
-                    alert("edit clicked")
+                    
 
                     const addressId = button.dataset.addressId;
 
@@ -819,7 +819,7 @@
              const couponModal = $('#couponModal');
             viewCouponBtn.click(function()
             {
-                alert("clickjed")
+                
                 $.ajax({
                     url:"/couponlist",
                     method:"GET",
