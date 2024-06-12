@@ -26,11 +26,7 @@ const cartSchema = new mongoose.Schema
       default:'S'
       
     },
-    price: {
-      type: Number,
-      default: 0,
-    },
-    totalprice:{type:Number},
+ 
     stock:{type:Number}
   })
 

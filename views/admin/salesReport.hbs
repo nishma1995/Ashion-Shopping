@@ -13,7 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
     <style>
-   
         table {
             width: 100%;
             border-collapse: collapse;
@@ -98,11 +97,12 @@
                             {{#each orders}}
                             <tr>
                                 <td>{{addOne @index}}</td>
-                                <td>{{userId.firstname}}</td>
-                                {{!--<td>{{this.validFrom}}</td>--}}
+                                {{#each this.userDetails}}
+                                <td>{{firstname}}</td>
+                                {{/each}}
                                 <td>
                                     <ul>
-                                        {{#each this.productIds}}
+                                        {{#each this.productDetails}}
                                         <li>{{name}}</li>
                                         {{/each}}
                                     </ul>
@@ -203,19 +203,18 @@
             $('#confirmCustomDateBtn').click(function () {
                 var startDate = $('#startDate').val();
                 var endDate = $('#endDate').val();
-                var currenttDate=new Date()
-                var formattedCurrentDate=currenttDate.toISOString().split('T')[0]
-                if(startDate>formattedCurrentDate||endDate>formattedCurrentDate)
-                {
-                    
-                        Swal.fire({
+                var currenttDate = new Date()
+                var formattedCurrentDate = currenttDate.toISOString().split('T')[0]
+                if (startDate > formattedCurrentDate || endDate > formattedCurrentDate) {
 
-                            text: 'Please select dates in the past or today.',
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 4000
-                        });
+                    Swal.fire({
+
+                        text: 'Please select dates in the past or today.',
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
                     return
                 }
 
@@ -233,8 +232,8 @@
                             $('#ordersBody').append(`
                         <tr>
                             <td>${index + 1}</td>
-                            <td>${order.userId.firstname}</td>
-                            <td>${order.productIds.map(p => p.name).join(', ')}</td>
+                        <td>${order.userDetails.map(user => user.firstname).join(', ')}</td>
+                            <td>${order.productDetails.map(product => product.name).join(', ')}</td>
                             <td>${order.formattedDate}</td>
                             <td>${order.paymentMethod}</td>
                             <td>${order.amount}</td>
@@ -261,14 +260,14 @@
                     url: '/admin/salesReport',
                     type: 'GET',
                     data: { period: period }, // Send period as part of the query parameters
-                    success: function (data) {              
+                    success: function (data) {
                         $('#ordersBody').empty(); // Clear existing orders
                         data.forEach(function (order, index) {
                             $('#ordersBody').append(`
                                 <tr>
                                     <td>${index + 1}</td>
-                                    <td>${order.userId.firstname}</td>
-                                    <td>${order.productIds.map(p => p.name).join(', ')}</td>
+                                    <td>${order.userDetails.map(user => user.firstname).join(', ')}</td>
+                                    <td>${order.productDetails.map(product => product.name).join(', ')}</td>
                                     <td>${order.formattedDate}</td>
                                     <td>${order.paymentMethod}</td>
                                     <td>${order.amount}</td>

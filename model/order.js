@@ -2,15 +2,13 @@
 const mongoose = require('mongoose');
 const user = require("../model/user");
 
+
 const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
       },
-      productIds: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-    }],
+    
     products: [
         {
           productId: {
@@ -30,11 +28,7 @@ const orderSchema = new mongoose.Schema({
             type:String,
             default:"pending"
           },
-          // requestCancellation:
-          // {
-          //   type:String,
-          //   default:"No requests"
-          // }
+       
           returnReason:{
             type:String
           },
@@ -70,12 +64,6 @@ const orderSchema = new mongoose.Schema({
     }
    
     
-    
-    // status: {
-    //     type: String,
-    //     enum: ['placed','pending', 'processing', 'shipped', 'delivered'], // Example status values, customize as needed
-    //     default: 'placed'
-    // },
 }, { timestamps: true });
 
 const Order = mongoose.model('Order', orderSchema);

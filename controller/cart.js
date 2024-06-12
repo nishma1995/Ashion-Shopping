@@ -14,7 +14,7 @@ const addtocart = async (req, res) => {
         const cartData = req.body;
 
 
-        const Price = +cartData.price;
+        //const Price = +cartData.price;
 
         const productdetails = await product.findOne({ _id: cartData.productId })
 
@@ -41,7 +41,7 @@ const addtocart = async (req, res) => {
                 userId: id,
                 productId: cartData.productId,
                 quantity: cartData.quantity,
-                price: Price,
+               // price: Price,
                 size: cartData.size,
                 color: cartData.color,
                 stock: cartData.stockleft
@@ -74,8 +74,14 @@ const cartPage = async (req, res) => {
 
     let User = req.session.user;
     const details = await cart.find({ userId: id }).populate('productId');
+    
     details.forEach(item => {
-        item.totalprice = (item.quantity * item.price).toFixed(2)
+        const productPrice=item.productId.price
+        const offerRate=item.productId.offerRate||0
+        const discount=(productPrice*(offerRate/100))
+        const finalPrice=productPrice-discount
+        item.finalPrice=finalPrice
+        item.totalprice = (item.quantity * finalPrice).toFixed(2)
     })
 
 

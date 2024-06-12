@@ -28,7 +28,7 @@ const post_login = async (req, res) => {
   if (email === ADMIN_USERNAME) {
     if (password === ADMIN_PASSWORD) {
       req.session.isAdminAuthenticated = true
-      const userData = await user.find({deleted:false})
+      const userData = await user.find({ deleted: false })
       res.render("admin/userManagement", { userData });
     } else {
       res.render("admin/adminLogIn", { error: "Invalid Password" });
@@ -93,7 +93,7 @@ const dashboard = async (req, res) => {
       }
     },
     { $sort: { totalQuantity: -1 } },
-    { $limit: 5 },
+    { $limit: 3 },
     {
       $lookup: {
         from: 'products',
@@ -172,8 +172,9 @@ const SalesData = async (req, res) => {
 
 
     const expectedSales = [
-      { month: 5, expectedSales: 30 },
       { month: 4, expectedSales: 20 },
+      { month: 5, expectedSales: 30 },
+      { month: 6, expectedSales: 30 }
 
 
     ];
@@ -210,7 +211,7 @@ const SalesData = async (req, res) => {
 
 const get_UserManagement = async (req, res) => {
   const userData = await user.find({ deleted: false })
-  
+
   res.render("admin/userManagement", { userData });
 }
 
@@ -218,7 +219,7 @@ const getDelete = async (req, res) => {
   try {
 
     const userId = req.params.id;
-   
+
     const users = await user.findByIdAndUpdate(userId, { deleted: true });
     console.log(users)
 
@@ -878,22 +879,32 @@ const salesReportPage = async (req, res) => {
   try {
 
     let query = { 'products.productStatus': 'Delivered' };
-    const orders = await order.find(query)
-      .sort({ _id: -1 })
-      .populate({
-        path: 'productIds',
-        select: 'name',
-      })
-      .populate({
-        path: 'userId',
-        select: 'firstname',
-      })
-      .exec();
+    const orders = await order.aggregate([
+      { $match: query },
+      { $sort: { _id: -1 } },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.productId',
+          foreignField: '_id',
+          as: 'productDetails',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userDetails',
+        },
+      },
+    ]);
+   
 
     orders.forEach(order => {
       order.formattedDate = order.orderedDate.toLocaleDateString('en-US');
     });
-
+  
     res.render('admin/salesReport', { orders });
   } catch (err) {
     console.error(err);
@@ -938,17 +949,26 @@ const salesReport = async (req, res) => {
       query.orderedDate = { $gte: startDate, $lte: endDate };
     }
 
-    const orders = await order.find(query)
-      .sort({ _id: -1 })
-      .populate({
-        path: 'productIds',
-        select: 'name'
-      })
-      .populate({
-        path: 'userId',
-        select: 'firstname'
-      })
-      .exec();
+    const orders = await order.aggregate([
+      {$match:query},
+      {$sort:{_id:-1}},
+      {$lookup:{
+        from: 'products',
+        localField: 'products.productId',
+        foreignField: '_id',
+        as: 'productDetails',
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'userDetails',
+      },
+    },
+      
+    ])
 
     const formattedOrders = [];
 
@@ -957,7 +977,7 @@ const salesReport = async (req, res) => {
     };
 
     orders.forEach(order => {
-      const formattedOrder = { ...order.toObject(), formattedDate: formatDate(order.orderedDate) };
+      const formattedOrder = { ...order, formattedDate: formatDate(order.orderedDate) };
       formattedOrders.push(formattedOrder);
     });
 

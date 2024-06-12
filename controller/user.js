@@ -701,11 +701,15 @@ const availability = async (req, res) => {
       totalCount = await product.countDocuments({ status: false, category: categoryId });
       filterCondition = { status: false, category: categoryId };
     } else if (filterApplied === "low_to_high") {
+
       totalCount = await product.countDocuments({ category: categoryId });
+      
+
       filterCondition = { category: categoryId };
       sortCondition = { price: 1 };
     } else if (filterApplied === "high_to_low") {
       totalCount = await product.countDocuments({ category: categoryId });
+      
       filterCondition = { category: categoryId };
       sortCondition = { price: -1 };
     } else if (filterApplied === "atoz") {
@@ -759,24 +763,32 @@ const checkout = async (req, res) => {
     let User = req.session.user;
     const razorpaykey = process.env.RAZOR_PAY_ID
     const address = await Address.find({ userId: id })
-    const cartData = await cart.find({ userId: id })
+    const cartData = await cart.find({ userId: id }).populate('productId')
+    
 
-    const productIds = cartData.map(item => item.productId)
+    const productIds = cartData.map(item => item.productId._id)
 
     const products = await product.find({ _id: { $in: productIds } })
+   
 
     const cartWithProducts = cartData.map(item => {
-      const product = products.find(product => product._id.equals(item.productId));
+      const product = products.find(product => product._id.equals(item.productId._id));
+  
+      const totalprice = product.offerRate && product.offerRate > 0 
+      ? item.quantity * product.price * (1 - product.offerRate / 100) 
+      : item.quantity * product.price;
       return {
         name: product.name,
         price: product.price,
-        totalprice: item.totalprice,
+
+        totalprice: totalprice.toFixed(2), 
         quantity: item.quantity,
         color: item.color
 
       };
     });
-    const subtotal = cartWithProducts.reduce((total, item) => total + item.totalprice, 0)
+   
+    const subtotal = cartWithProducts.reduce((total, item) => total + parseInt(item.totalprice), 0)
     const total = subtotal + deliverycharge
     res.render("user/checkOut", { address, cartWithProducts, subtotal, productIds, User, deliverycharge, total, razorpaykey })
   } catch (error) {
@@ -799,7 +811,7 @@ const placeorder = async (req, res) => {
 
     const productIdsArray = productIds.split(',').map(productId => new mongoose.Types.ObjectId(productId.trim()));
 
-    const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId });
+    const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId }).populate('productId');
 
     const productsDetails = [];
     for (const item of cartItems) {
@@ -809,7 +821,7 @@ const placeorder = async (req, res) => {
         quantity: item.quantity,
         color: item.color,
         size: item.size,
-        productPrice: item.price,
+        productPrice: item.productId.price,
         productStatus: "pending"
 
       };
@@ -827,7 +839,7 @@ const placeorder = async (req, res) => {
       addressId: selectedAddressId,
       paymentMethod: paymentmethod,
       amount: totalAmountInput,
-      productIds: productIdsArray,
+     // productIds: productIdsArray,
       products: productsDetails,
       orderedDate: new Date(),
       paymentStatus: 'pending',
@@ -861,9 +873,9 @@ const placeorder = async (req, res) => {
     } else if (paymentmethod === 'razorpay') {
 
       newOrder.paymentStatus = 'paid';
-    } else if (paymentmethod === 'cashondelivery') {
+    } else if (paymentmethod === 'cash-on-delivery') {
 
-      newOrder.paymentStatus = 'cashondelivery';
+      newOrder.paymentStatus = 'cash-on-delivery';
     } else {
       newOrder.paymentStatus = 'failed';
     }
@@ -1242,8 +1254,8 @@ const ordersuccess = async (req, res) => {
 
 
   const productDetails = [];
-  for (const productId of orderdetails.productIds) {
-    const products = await product.findById(productId);
+  for (const item of orderdetails.products) {
+    const products = await product.findById(item.productId);
     if (products) {
       productDetails.push(products);
     }
@@ -1272,7 +1284,7 @@ const orderFailure = async (req, res) => {
 
       const productIdsArray = failureData.productIds.split(',').map(productId => new mongoose.Types.ObjectId(productId.trim()));
 
-      const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId });
+      const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId }).populate('productId');
 
       const productsDetails = [];
       for (const item of cartItems) {
@@ -1282,7 +1294,7 @@ const orderFailure = async (req, res) => {
           quantity: item.quantity,
           color: item.color,
           size: item.size,
-          productPrice: item.price
+          productPrice: item.productId.price
 
         };
         productsDetails.push(productDetail);
@@ -1294,7 +1306,7 @@ const orderFailure = async (req, res) => {
         addressId: failureData.selectedAddressId,
         paymentMethod: failureData.paymentMethod,
         amount: failureData.amount,
-        productIds: productIdsArray,
+       // productIds: productIdsArray,
         products: productsDetails,
         orderedDate: new Date(),
         paymentStatus: 'failed',
@@ -1353,8 +1365,8 @@ const orderFailurePage = async (req, res) => {
 
 
   const productDetails = [];
-  for (const productId of orderdetails.productIds) {
-    const products = await product.findById(productId);
+  for (const item of orderdetails.products) {
+    const products = await product.findById(item.productId);
     if (products) {
       productDetails.push(products);
     }
@@ -1376,7 +1388,7 @@ const placeorderFailure = async (req, res) => {
 
     const productIdsArray = productIds.split(',').map(productId => new mongoose.Types.ObjectId(productId.trim()));
 
-    const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId });
+    const cartItems = await cart.find({ productId: { $in: productIdsArray }, userId: userId }).populate('productId');
 
     const productsDetails = [];
     for (const item of cartItems) {
@@ -1386,7 +1398,7 @@ const placeorderFailure = async (req, res) => {
         quantity: item.quantity,
         color: item.color,
         size: item.size,
-        productPrice: item.price
+        productPrice: item.productId.price
 
       };
       productsDetails.push(productDetail);

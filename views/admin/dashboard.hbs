@@ -50,43 +50,43 @@
         .summary-cards .card-text {
             color: white;
         }
+
         .card-custom {
-    border: none;
-    border-radius: 10px;
-    overflow: hidden;
-}
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-.card-custom .card-header {
-    background-color: #ffc107;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
+        .card-custom .card-header {
+            background-color: #ffc107;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
 
-.card-custom .card-body {
-    padding: 15px;
-}
+        .card-custom .card-body {
+            padding: 15px;
+        }
 
-.card-custom .list-group-item {
-    border: none;
-    text-align: center;
-    padding: 10px 0;
-}
+        .card-custom .list-group-item {
+            border: none;
+            text-align: center;
+            padding: 10px 0;
+        }
 
-.card-custom .list-group-item:nth-child(odd) {
-    background-color: #f8f9fa;
-}
+        .card-custom .list-group-item:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
 
-.card-custom .card-header {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
+        .card-custom .card-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
 
-.card-custom .list-group-item {
-    font-size: 1rem;
-    font-weight: normal;
-}
-
+        .card-custom .list-group-item {
+            font-size: 1rem;
+            font-weight: normal;
+        }
     </style>
 
 </head>
@@ -139,57 +139,91 @@
                                         </div>
                                     </div>
 
-                                    <div id="chartContainer" style="height: 400px; overflow-y: auto;">
-                                        <canvas id="salesChart" width="800" height="400"></canvas>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center my-3">
-                                        <div class="input-group w-auto">
-                                            <label class="input-group-text" for="interval">Select Interval:</label>
-                                            <select id="interval" class="form-select">
-                                                <option value="monthly">Monthly</option>
-                                                <option value="yearly">Yearly</option>
-                                            </select>
-                                        </div>
-                                        <button class="btn btn-primary" onclick="fetchSalesData()">Fetch Data</button>
-                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="container">
 
-                                    <!-- Top Products and Categories Section -->
-                                    <div class="container my-4">
-                                        <div class="row">
-                                            <!-- Top Products Card -->
-                                            <div class="col-md-6 d-flex justify-content-center align-items-center">
-                                                <div class="card mb-3 w-100 shadow-sm card-custom">
-                                                    <div class="card-header bg-warning text-center">
-                                                        <h5 class="card-title m-0">Top Products</h5>
+
+                                            <!-- Summary Cards -->
+                                            <div class="row summary-cards mt-4">
+                                                <!-- Summary Cards Content Here -->
+                                            </div>
+
+                                            <!-- Charts Section -->
+                                            <div class="row">
+                                                <!-- Dynamic Sales Chart -->
+                                                <div class="col-md-8">
+                                                    <div id="chartContainer"
+                                                        style="height: 400px; width: 500px; overflow-y: auto; margin-top: 60px;">
+                                                        <canvas id="salesChart" width="500" height="500"></canvas>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <ul class="list-group list-group-flush">
-                                                            {{#each productSalesData}}
-                                                            <li class="list-group-item text-center">{{this.productName}}
-                                                            </li>
-                                                            {{/each}}
-                                                        </ul>
+                                                </div>
+                                                <!-- Static Sales Pie Chart -->
+                                                <div class="col-md-4">
+                                                    <div id="categorySalesPieChartContainer"
+                                                        style="height: 400px; width: 600px; overflow-y: auto; margin-top: 60px;">
+                                                        <canvas id="categorySalesPieChart" width="500"
+                                                            height="500"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Top Categories Card -->
-                                            <div class="col-md-6 d-flex justify-content-center align-items-center">
-                                                <div class="card mb-3 w-100 shadow-sm card-custom">
-                                                    <div class="card-header bg-warning text-center">
-                                                        <h5 class="card-title m-0">Top Categories</h5>
+
+                                            <div class="d-flex justify-content-between align-items-center my-3">
+                                                <div class="input-group w-auto">
+                                                    <label class="input-group-text" for="interval">Select
+                                                        Interval:</label>
+                                                    <select id="interval" class="form-select">
+                                                        <option value="monthly">Monthly</option>
+                                                        <option value="yearly">Yearly</option>
+                                                    </select>
+                                                    <button class="btn btn-primary ml-5"
+                                                        onclick="fetchSalesData()">Fetch
+                                                        Data</button>
+                                                </div>
+
+
+                                            </div>
+
+                                            <!-- Top Products and Categories Section -->
+                                            <div class="container my-4 mt-5">
+                                                <div class="row">
+                                                    <!-- Top Products Card -->
+                                                    <div
+                                                        class="col-md-6 d-flex justify-content-center align-items-center">
+                                                        <div class="card mb-3 w-100 shadow-sm card-custom">
+                                                            <div class="card-header bg-warning text-center">
+                                                                <h5 class="card-title m-0">Top Products</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="list-group list-group-flush">
+                                                                    {{#each productSalesData}}
+                                                                    <li class="list-group-item text-center">
+                                                                        {{this.productName}}
+                                                                    </li>
+                                                                    {{/each}}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <ul class="list-group list-group-flush">
-                                                            {{#each categorySalesData}}
-                                                            <li class="list-group-item text-center">{{categoryName}}
-                                                            </li>
-                                                            {{/each}}
-                                                        </ul>
+                                                    <!-- Top Categories Card -->
+                                                    <div
+                                                        class="col-md-6 d-flex justify-content-center align-items-center">
+                                                        <div class="card mb-3 w-100 shadow-sm card-custom">
+                                                            <div class="card-header bg-warning text-center">
+                                                                <h5 class="card-title m-0">Top Categories</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="list-group list-group-flush">
+                                                                    {{#each categorySalesData}}
+                                                                    <li class="list-group-item text-center">
+                                                                        {{categoryName}}
+                                                                    </li>
+                                                                    {{/each}}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
                             </main>
                         </div>
@@ -212,6 +246,7 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 fetchSalesData();
+                renderCategorySalesPieChart();
             });
             const salesChart = document.getElementById('salesChart').getContext('2d');
             let chartInstance = null;
@@ -248,12 +283,12 @@
                         datasets: [
                             {
                                 label: 'Actual Sales',
-                                backgroundColor: 'blue',
+                                backgroundColor: 'orange',
                                 data: actualSales
                             },
                             {
                                 label: 'Expected Sales',
-                                backgroundColor: 'green',
+                                backgroundColor: 'pink',
                                 data: expectedSales
                             }
                         ]
@@ -276,6 +311,36 @@
                     }
                 });
             };
+            // Function to render sales data pie chart
+              const renderCategorySalesPieChart = () => {
+            const categorySalesPieChart = document.getElementById('categorySalesPieChart').getContext('2d');
+
+            const labels = ['Men', 'Women', 'Kids', 'Accessories'];
+            const staticSalesData = [3000, 2500, 1500, 2000]; // Example static sales data
+
+            new Chart(categorySalesPieChart, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Category-wise Sales Data',
+                        backgroundColor: ['#ffcd56', '#ff6384', '#36a2eb', '#fd6b19'],
+                        data: staticSalesData
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    aspectRatio: 1,
+                    title: {
+                        display: true,
+                        text: 'Category-wise Sales Data'
+                    }
+                }
+            });
+        };
+
+
         </script>
 </body>
 
